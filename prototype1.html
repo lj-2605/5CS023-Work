@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My weather app</title>
+  </head>
+  <body>
+	<h1>Weather in Nottingham</h1>
+	<p id="wind_speed">Please wait...</p>
+	<script>
+		// Fetch Nottingham weather data from API
+		fetch('https://api.openweathermap.org/data/2.5/weather?q=Nottingham&appid=01fb3b79ab1eb8f42f799f0c206380d1&units=metric')
+	
+		// Convert response string to json object
+		.then(response => response.json())
+		.then(response => {
+
+		// Display whole API response in browser console (take a look at it!)
+		console.log(response);
+		
+		// Copy one element of response to our HTML paragraph
+   
+		document.getElementById("wind_speed").innerHTML = 'Wind Speed: ' + response.wind.speed + ' M/S';
+
+		})
+		.catch(err => {
+	
+		// Display errors in console
+		console.log(err);
+		});		
+
+	</script>
+  </body>
+</html>

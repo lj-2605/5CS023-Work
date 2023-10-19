@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My weather app</title>
+  </head>
+  <body>
+	<h1>Weather in Nottingham</h1>
+	<p id="weather_desc">Please wait...</p>
+	<p id="weather_temp">Please wait...</p>
+	<p id="weather_wind">Please wait...</p>
+	<p id="weather_humid">Please wait...</p>
+	<p id="weather_when">Please wait...</p>
+	<p id="city">Please wait...</p>
+	<script>
+		// Fetch Nottingham weather data from my database
+		fetch('https://mi-linux.wlv.ac.uk/~2222880/my-api.php?city=nottingham')
+	
+		// Convert response string to json object
+		.then(response => response.json())
+		.then(response => {
+
+		// Display whole API response in browser console (take a look at it!)
+		console.log(response);
+		
+		// Copy one element of response to our HTML paragraph
+		document.getElementById("weather_desc").innerHTML = 'Weather Description: ' + response.weather_description;
+		document.getElementById("weather_temp").innerHTML = 'Temperature: ' + response.weather_temperature + '°C';
+		document.getElementById("weather_wind").innerHTML = 'Wind Speed: ' + response.weather_wind + ' M/S';
+		document.getElementById("weather_humid").innerHTML = 'Humidity: ' + response.weather_humidity + '%';
+		document.getElementById("weather_when").innerHTML = 'Date & Time: ' + response.weather_when;
+		document.getElementById("city").innerHTML = 'City: ' + response.city;
+		})
+		.catch(err => {
+	
+		// Display errors in console
+		console.log(err);
+		});		
+
+	</script>
+  </body>
+</html>

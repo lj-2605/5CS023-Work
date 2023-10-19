@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My weather app</title>
+  </head>
+  <body>
+	<h1>Weather in Nottingham</h1>
+	<p id="weather_desc">Please wait...</p>
+	<p id="weather_temp">Please wait...</p>
+	<p id="weather_wind">Please wait...</p>
+	<p id="weather_humid">Please wait...</p>
+	<p id="weather_when">Please wait...</p>
+	<p id="city">Please wait...</p>
+	<script>
+		// Check browser cache first, use if there and less than 10 seconds old
+		if(localStorage.weather_when != null
+		&& parseInt(localStorage.weather_when) + 10000 > Date.now()) {
+
+		let freshness = Math.round((Date.now() - localStorage.weather_when)/1000) + " second(s)";
+		document.getElementById("weather_desc").innerHTML = 'Weather Description: ' + localStorage.weather_desc;
+		document.getElementById("weather_temp").innerHTML = 'Temperature: ' + localStorage.weather_temp;
+		document.getElementById("weather_wind").innerHTML = 'Wind Speed: ' + localStorage.weather_wind;
+		document.getElementById("weather_humid").innerHTML = 'Humidity: ' + localStorage.weather_humid;
+		document.getElementById("weather_when").innerHTML = 'Last Updated: ' + freshness + ' ago';
+		document.getElementById("city").innerHTML = 'City: ' + localStorage.city;
+		
+		// No local cache, access network
+		} else {
+
+			// Fetch Nottingham weather data from my database
+			fetch('https://mi-linux.wlv.ac.uk/~2222880/my-api.php?city=nottingham')
+	
+			// Convert response string to json object
+			.then(response => response.json())
+			.then(response => {
+
+			// Display whole API response in browser console (take a look at it!)
+			console.log(response);
+		
+			// Copy one element of response to our HTML paragraph
+			document.getElementById("weather_desc").innerHTML = 'Weather Description: ' + response.weather_description;
+			document.getElementById("weather_temp").innerHTML = 'Temperature: ' + response.weather_temperature + '°C';
+			document.getElementById("weather_wind").innerHTML = 'Wind Speed: ' + response.weather_wind + ' M/S';
+			document.getElementById("weather_humid").innerHTML = 'Humidity: ' + response.weather_humidity + '%';
+			document.getElementById("weather_when").innerHTML = 'Date & Time: ' + response.weather_when;
+			document.getElementById("city").innerHTML = 'City: ' + response.city;
+			
+			// Save new data to browser, with new timestamp
+			localStorage.weather_desc = response.weather_description;
+			localStorage.weather_temp = response.weather_temperature + '°C';
+			localStorage.weather_wind = response.weather_wind + ' M/S';
+			localStorage.weather_humid = response.weather_humidity + '%';
+			localStorage.weather_when = Date.now();
+			localStorage.city = response.city;			// milliseconds since January 1 1970
+
+			})
+			.catch(err => {
+	
+			// Display errors in console
+			console.log(err);
+			});		
+		}
+	</script>
+  </body>
+</html>
